@@ -9,9 +9,23 @@
 - name: Install collectd
   package:
     name: "{{ packages }}"
+    # Important: Leave state: present, as we will overwrite the existing config
+    # when this task changes!
     state: present
   register: install
   tags: ['collectd']
+
+- name: Perform collectd first config
+  template:
+    src: collectd.conf.j2
+    dest: /etc/collectd.conf
+    owner: root
+    group: root
+    mode: 0640
+    force: true
+  tags: ['collectd']
+  when: install.changed == true
+  notify: restart collectd
 
 - name: Ensure collectd is configured
   template:
@@ -20,8 +34,9 @@
     owner: root
     group: root
     mode: 0640
-    force: "{{overwrite}} or install.changed"
+    force: "{{overwrite}}"
   tags: ['collectd']
+  when: install.changed == false
   notify: restart collectd
 
 - name: Ensure collectd is enabled
@@ -30,4 +45,3 @@
     state: started
     enabled: true
   tags: ['collectd']
-

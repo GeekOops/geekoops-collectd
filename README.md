@@ -1,3 +1,5 @@
+[![Test deployment](https://github.com/GeekOops/geekoops-collectd/actions/workflows/CI.yml/badge.svg)](https://github.com/GeekOops/geekoops-collectd/actions/workflows/CI.yml)
+
 # geekoops-collectd
 
 Easy ansible role to setup `collectd`. Currently only `influxdb` is supported by this role. This ansible role works with
