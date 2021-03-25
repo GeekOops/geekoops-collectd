@@ -1,0 +1,33 @@
+---
+# tasks file for geekoops-collectd
+
+# Distribution specific vars are ALWAYS needed, so don't forget the tags here
+- name: include distribution specific vars
+  include_vars: "{{ansible_distribution}}_{{ansible_distribution_version}}.yml"
+  tags: ['collectd']
+
+- name: Install collectd
+  package:
+    name: "{{ packages }}"
+    state: present
+  register: install
+  tags: ['collectd']
+
+- name: Ensure collectd is configured
+  template:
+    src: collectd.conf.j2
+    dest: /etc/collectd.conf
+    owner: root
+    group: root
+    mode: 0640
+    force: "{{overwrite}} or install.changed"
+  tags: ['collectd']
+  notify: restart collectd
+
+- name: Ensure collectd is enabled
+  systemd:
+    name: collectd
+    state: started
+    enabled: true
+  tags: ['collectd']
+

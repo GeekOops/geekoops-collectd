@@ -1,0 +1,28 @@
+---
+# defaults file for geekoops-collectd
+
+nodename: "localhost"
+interval: 10
+overwrite: false
+
+enable_influx: false
+influx_host: "127.0.0.1"
+influx_port: 25826
+
+enable_prometheus: false
+prometheus_port: "9103"
+
+## Plugins
+
+enable_disk: true
+enable_cpu: true
+enable_load: true
+enable_memory: true
+enable_swap: true
+enable_smart: false
+enable_df: false
+
+disk_disks: []
+df_disks: []
+smart_disk: ""
+smart_use_serial: true

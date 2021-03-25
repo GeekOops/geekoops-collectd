@@ -1,0 +1,11 @@
+---
+# handlers file for geekoops-collectd
+
+
+- name: reload firewalld
+  shell: firewall-cmd --reload
+
+- name: restart collectd
+  systemd:
+    name: "{{collectd_service}}"
+    state: restarted
