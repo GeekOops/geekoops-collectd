@@ -2,7 +2,8 @@
 
 # geekoops-collectd
 
-Easy ansible role to setup `collectd`. Currently only `influxdb` is supported by this role. This ansible role works with
+Easy ansible role to setup system metrics transmission to `collectd`.
+Currently only `influxdb` is supported by this role. This ansible role works with
 
 - openSUSE Leap 15.2
 
@@ -33,6 +34,16 @@ If `overwrite` is true, any existing `collectd.conf` file will be overwritten by
     - hosts: jellyfish
       roles:
          - { role: geekoops-collectd }
+
+Extended example
+
+    - hosts: jellyfish
+      roles:
+         - role: geekoops-collectd
+           vars:
+             nodename: "jellyfish"
+             enable_influx: true
+             influx_host: vinculum
 
 ## License
 
