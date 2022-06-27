@@ -16,6 +16,7 @@ prometheus_port: "9103"
 
 enable_disk: true
 enable_cpu: true
+enable_cpufreq: false
 enable_load: true
 enable_memory: true
 enable_swap: true
@@ -26,3 +27,6 @@ disk_disks: []
 df_disks: []
 smart_disk: ""
 smart_use_serial: true
+
+report_by_cpu: false
+report_by_state: false
