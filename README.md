@@ -5,7 +5,8 @@
 Easy ansible role to setup system metrics transmission to `collectd`.
 Currently only `influxdb` is supported by this role. This ansible role works with
 
-- openSUSE Leap 15.2
+- openSUSE Leap 15.3
+- openSUSE Leap 15.4
 
 
 ## Role Variables

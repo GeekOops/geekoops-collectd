@@ -14,7 +14,11 @@ Interval     {{ interval }}
 LoadPlugin syslog
 LoadPlugin cpu
 #LoadPlugin cpufreq
+{% if enable_cpufreq == true %}
+LoadPlugin cpusleep
+{% else %}
 #LoadPlugin cpusleep
+{% endif %}
 {% if enable_df == true %}
 LoadPlugin df
 {% else %}
@@ -109,8 +113,12 @@ LoadPlugin write_prometheus
 
 {% if enable_cpu == true %}
 <Plugin cpu>
+  {% if report_by_cpu == true %}
   ReportByCpu true
+  {% endif %}
+  {% if report_by_state == true %}
   ReportByState true
+  {% endif %}
   ValuesPercentage true
   ReportNumCpu false
   ReportGuestState false

@@ -1,6 +1,8 @@
 ---
 galaxy_info:
   author: Felix Niederwanger
+  role_name: nginx
+  namespace: collectd
   description: Configurable collectd installation role
   company: SUSE
   issue_tracker_url: https://github.com/GeekOops/geekoops-collectd/issues
@@ -15,7 +17,8 @@ galaxy_info:
   platforms:
     - name: opensuse
       versions:
-        - 15.2
+        - 15.3
+        - 15.4
 
   galaxy_tags:
     - collectd

@@ -1,3 +1,5 @@
 ---
+# openSUSE Leap 15.4 specific variables
+
 packages: ['collectd']
 collectd_service: "collectd"
