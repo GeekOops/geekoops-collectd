@@ -11,42 +11,20 @@ Hostname    "{{ nodename }}"
 AutoLoadPlugin true
 Interval     {{ interval }}
 
-LoadPlugin syslog
-LoadPlugin cpu
+#LoadPlugin syslog
+#LoadPlugin cpu
 #LoadPlugin cpufreq
 {% if enable_cpufreq == true %}
 LoadPlugin cpusleep
-{% else %}
-#LoadPlugin cpusleep
 {% endif %}
-{% if enable_df == true %}
-LoadPlugin df
-{% else %}
-#LoadPlugin df
-{% endif %}
-{% if enable_disk == true %}
-LoadPlugin disk
-{% else %}
-#LoadPlugin disk
-{% endif %}
-#LoadPlugin hddtemp
 #LoadPlugin hugepages
 LoadPlugin interface
 #LoadPlugin ipmi
-{% if enable_load == true %}
-LoadPlugin load
-{% else %}
-#LoadPlugin load
-{% endif %}
-#LoadPlugin md
 {% if enable_memory == true %}
 LoadPlugin memory
-{% else %}
-#LoadPlugin memory
 {% endif %}
 #LoadPlugin mysql
 #LoadPlugin netlink
-#LoadPlugin network
 #LoadPlugin nfs
 #LoadPlugin nginx
 #LoadPlugin ntpd
@@ -59,42 +37,32 @@ LoadPlugin memory
 #LoadPlugin rrdtool
 #LoadPlugin sensors
 #LoadPlugin serial
-
-{% if enable_smart == true and smart_disk != "" %}
-#LoadPlugin smart
-{% else %}
-#LoadPlugin smart
-{% endif %}
 #LoadPlugin snmp
 #LoadPlugin snmp_agent
 #LoadPlugin statsd
-{% if enable_swap == true %}
-LoadPlugin swap
-{% else %}
-#LoadPlugin swap
-{% endif %}
 #LoadPlugin thermal
+{% if enable_uptime == true %}
 LoadPlugin uptime
+{% endif %}
 #LoadPlugin users
 #LoadPlugin virt
-#LoadPlugin vmem
 
-{% if enable_prometheus == true %}
-LoadPlugin write_prometheus
+{% if enable_apcups == true %}
+<Plugin apcups>
+	Host "{{ apcups_host }}"
+	Port "{{ apcups_port }}"
+	ReportSeconds {{ apcups_report_seconds }}
+	PersistentConnection {{ apcups_persistent_connection }}
+</Plugin>
 {% endif %}
 
-#<Plugin apcups>
-#	Host "localhost"
-#	Port "3551"
-#	ReportSeconds true
-#	PersistentConnection true
-#</Plugin>
-
-#<Plugin "battery">
-#  ValuesPercentage false
-#  ReportDegraded false
-#  QueryStateFS false
-#</Plugin>
+{% if enable_battery == true %}
+<Plugin "battery">
+  ValuesPercentage {{ battery_percentage }}
+  ReportDegraded {{ battery_report_degraded }}
+  QueryStateFS false
+</Plugin>
+{% endif %}
 
 #<Plugin chrony>
 #	Host    "localhost"
@@ -102,9 +70,13 @@ LoadPlugin write_prometheus
 #	Timeout "2"
 #</Plugin>
 
-#<Plugin connectivity>
-#  Interface eth0
-#</Plugin>
+{% if enable_connectivity == true %}
+<Plugin connectivity>
+  {% for interface in connectivity_interfaces %}
+  Interface {{ interface }}
+  {% endfor %}
+</Plugin>
+{% endif %}
 
 #<Plugin cgroups>
 #  CGroup "libvirt"
@@ -113,16 +85,10 @@ LoadPlugin write_prometheus
 
 {% if enable_cpu == true %}
 <Plugin cpu>
-  {% if report_by_cpu == true %}
-  ReportByCpu true
-  {% endif %}
-  {% if report_by_state == true %}
-  ReportByState true
-  {% endif %}
-  ValuesPercentage true
-  ReportNumCpu false
-  ReportGuestState false
-  SubtractGuestState true
+  ReportByCpu {{ cpu_report_by_cpu }}
+  ReportByState {{ cpu_report_by_state }}
+  ValuesPercentage {{ cpu_values_percentage }}
+  ReportNumCpu {{ cpu_report_num_cpus }}
 </Plugin>
 {% endif %}
 
@@ -172,10 +138,13 @@ LoadPlugin write_prometheus
 #	</Directory>
 #</Plugin>
 
-#<Plugin hddtemp>
-#  Host "127.0.0.1"
-#  Port "7634"
-#</Plugin>
+{% if enable_hddtemp == true %}
+<Plugin hddtemp>
+  Host "127.0.0.1"
+  Port "7634"
+  # TranslateDevicename true
+</Plugin>
+{% endif %}
 
 #<Plugin hugepages>
 #    ReportPerNodeHP  true
@@ -198,10 +167,11 @@ LoadPlugin write_prometheus
 </Plugin>
 {% endif %}
 
-#<Plugin md>
-#	Device "/dev/md0"
-#	IgnoreSelected false
-#</Plugin>
+{% if enable_md == true %}
+<Plugin md>
+	Device "{{ md_device }}"
+</Plugin>
+{% endif %}
 
 {% if enable_memory == true %}
 <Plugin memory>
@@ -250,7 +220,7 @@ LoadPlugin write_prometheus
 #	IgnoreSelected false
 #</Plugin>
 
-{% if enable_influx %}
+{% if influx_host != "" %}
 <Plugin network>
 	Server "{{ influx_host }}" "{{ influx_port }}"
 </Plugin>
@@ -545,11 +515,10 @@ LoadPlugin write_prometheus
 </Plugin>
 {% endif %}
 
-{% if enable_prometheus == true %}
+{% if prometheus_port != "" %}
 <Plugin "write_prometheus">
   Port "{{ prometheus_port }}"
 </Plugin>
-
 {% endif %}
 
 #<Plugin sysevent>
@@ -580,6 +549,8 @@ LoadPlugin write_prometheus
 #	PersistentNotification false
 #</Plugin>
 
-#<Plugin vmem>
-#	Verbose false
-#</Plugin>
+{% if enable_vmem == true %}
+<Plugin vmem>
+	Verbose {{ vmem_verbose }}
+</Plugin>
+{% endif %}

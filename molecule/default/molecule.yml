@@ -37,5 +37,4 @@ verifier:
   lint:
     name: flake8
 lint: |
-  set -e
-  yamllint .
+  yamllint -d "{extends: relaxed, rules: {line-length: {max: 200}}}" .

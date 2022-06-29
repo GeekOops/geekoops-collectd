@@ -1,32 +1,61 @@
 ---
 # defaults file for geekoops-collectd
 
-nodename: "localhost"
+nodename: "{{ ansible_hostname }}"
 interval: 10
-overwrite: false
+overwrite: true
 
-enable_influx: false
-influx_host: "127.0.0.1"
+## Enable pushing of metrics to influxdb
+
+influx_host: ""
 influx_port: 25826
 
-enable_prometheus: false
-prometheus_port: "9103"
+## Enable prometheus scrape webserver on this port
+
+prometheus_port: ""
 
 ## Plugins
 
 enable_disk: true
 enable_cpu: true
+enable_uptime: true
 enable_cpufreq: false
 enable_load: true
 enable_memory: true
 enable_swap: true
 enable_smart: false
 enable_df: false
+enable_apcups: false
+enable_vmem: false
+enable_connectivity: false
+enable_battery: false
+enable_hddtemp: false
+enable_md: false
 
 disk_disks: []
 df_disks: []
+
 smart_disk: ""
 smart_use_serial: true
 
-report_by_cpu: false
-report_by_state: false
+cpu_report_by_cpu: "false"
+cpu_report_by_state: "false"
+cpu_values_percentage: "true"
+cpu_report_num_cpus: "false"
+
+apcups_host: "localhost"
+apcups_port: "3551"
+apcups_report_seconds: "true"
+apcups_persistent_connection: "true"
+
+vmem_verbose: "false"
+
+connectivity_interfaces: []
+
+battery_percentage: "true"
+battery_report_degraded: "false"
+
+hdd_temp_host: "127.0.0.1"
+hdd_temp_port: "7634"
+
+md_device: "/dev/md0"
